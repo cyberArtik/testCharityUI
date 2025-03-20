@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="United Care And Support, maximum tax deductions and help those in need. Cars, money, and other vehicle donations accepted.">
+    <meta name="keywords" content="vehicle donation, car donation, boat donation, tax deduction, charity, free towing, community support, free food">
+
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@300;400;500;700&family=Oswald:wght@600&display=swap"
+        rel="stylesheet">
+        <link rel="shortcut icon" href="../images/favicod.ico" type="image/svg+xml">
+
+    <title>United Care Support</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="donations.css">
+
+</head>
+
+<body>
+
+    <header class="header" data-header>
+        <div class="container">
+
+            <a href="../../index.html" class="logo">
+                <img src="../images/logobg.png" alt="Logo" class="header-logo">
+            </a>
+
+            <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
+
+            <nav class="navbar" data-navbar>
+
+                <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+
+                <a href="#" class="logo">UCS</a>
+
+                <ul class="navbar-list">
+
+                    <li>
+                        <a href="../../index.html" class="navbar-link" data-nav-link>
+                            <span>Home</span>
+
+                            <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#about" class="navbar-link" data-nav-link>
+                            <span>About</span>
+
+                            <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#donate" class="navbar-link" data-nav-link>
+                            <span>Donate</span>
+
+                            <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#impact" class="navbar-link" data-nav-link>
+                            <span>Impact</span>
+
+                            <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#contact" class="navbar-link" data-nav-link>
+                            <span>Contact</span>
+
+                            <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+            <div class="header-action">
+
+                <a href="assets/pages/donations.html" class="btn btn-primary">
+                    <span>Donation</span>
+
+                    <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+                </a>
+
+            </div>
+
+        </div>
+    </header>
+
+
+
+    <main class="main-container">
+
+        <section class="section steps-section">
+            <div class="container">
+                <h2 class="section-title" id="about">Three Simple Steps to Donate</h2>
+                <p class="section-subtitle">Making a difference is easier than you think. Follow these simple steps to
+                    donate your vehicle.</p>
+
+                <div class="timeline-container">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-number">1</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Contact Us</h3>
+                                <p class="timeline-description">Fill out our easy online form or call us at <b>+1 (646)
+                                        374-7376</b> </p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-number">2</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Schedule Pickup</h3>
+                                <p class="timeline-description">Our team will contact you today to schedule a free and
+                                    convenient pickup.</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-number">3</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Get Rewarded</h3>
+                                <p class="timeline-description">Receive a tax receipt and a vacation voucher as our
+                                    gratitude for your involvment!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-step Form -->
+        <section class="donation-form-container" id="donate">
+            <div class="form-steps">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+                <div class="step">4</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+
+            <form id="donationForm" onsubmit="handleSubmit(event)">
+
+
+                <!-- Step 1: Donation Type -->
+                <div class="form-page active" data-step="1">
+                    <h2 class="donation-type">Choose Donation Type</h2>
+                    <div class="donation-type-cards">
+                        <div class="donation-card" onclick="selectDonationType('money')">
+                            <h3>Monetary Donation</h3>
+                            <p>Support our cause with a financial contribution</p>
+                        </div>
+                        <div class="donation-card" onclick="selectDonationType('vehicle')">
+                            <h3>Vehicle Donation</h3>
+                            <p>Donate your car, truck, or motorcycle</p>
+                        </div>
+                        <div class="donation-card" onclick="selectDonationType('vessel')">
+                            <h3>Vessel Donation</h3>
+                            <p>Donate your boat or water vessel</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Personal Information -->
+                <div class="form-page" data-step="2">
+                    <h2>Personal Information</h2>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </div>
+
+                <!-- Step 3: Donation Details -->
+                <div class="form-page" data-step="3">
+                    <h2>Donation Details</h2>
+                    <div id="donationSpecificFields"></div>
+                </div>
+
+                <!-- Step 4: Confirmation -->
+                <div class="form-page" data-step="4">
+                    <h2>Confirm Your Donation</h2>
+                    <div id="donationSummary"></div>
+                    <div class="form-group">
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="previousStep()" id="prevBtn"
+                        style="display: none;">Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" id="nextBtn">Next</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Submit
+                        Donation</button>
+                </div>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message">
+                <div class="checkmark">✓</div>
+                <h2>Thank You for Your Donation!</h2>
+                <p>We'll contact you shortly with next steps.</p>
+            </div>
+        </section>
+
+        <section class="section benefits-section">
+            <div class="container">
+                <h2 class="section-title">Why Donate Your Vehicle?</h2>
+
+                <div class="benefits-container">
+                    <div class="benefit-card-large">
+                        <div class="benefit-icon-large">💰</div>
+                        <article class="benefit-content">
+                            <h3 class="benefit-title">Help Those in Need</h3>
+                            <p class="benefit-description">Your donation directly supports vital community programs and
+                                services. Watch your contribution transform into meaningful assistance for families in
+                                need.</p>
+                            <div class="benefit-details">
+                                • Support local community programs<br>
+                                • Help provide essential services<br>
+                                • Create lasting positive impact
+                            </div>
+                        </article>
+                       
+                    </div>
+
+                    <div class="benefit-card-large">
+                        <div class="benefit-icon-large">🚛</div>
+                        <article class="benefit-content">
+                            <h3 class="benefit-title">Tax Deductible</h3>
+                            <p class="benefit-description">Maximize your tax benefits while making a meaningful
+                                contribution to your community. Our team ensures you receive the highest possible tax
+                                deduction for your vehicle donation.</p>
+                            <div class="benefit-details">
+                                • Receive maximum tax deduction for your contribution<br>
+                                • Professional handling of all IRS documentation<br>
+                                • Detailed receipt and tax forms provided promptly
+                            </div>
+                        </article>
+                       
+                    </div>
+
+                    <div class="benefit-card-large" id="impact">
+                        <div class="benefit-icon-large">❤️</div>
+                        <article class="benefit-content">
+                            <h3 class="benefit-title">Free Professional Towing</h3>
+                            <p class="benefit-description">Don't worry about transportation - we handle everything. Our
+                                professional towing service picks up your vehicle at no cost to you, anywhere in the
+                                country.</p>
+                            <div class="benefit-details">
+                                • Completely free towing service<br>
+                                • Nationwide pickup available<br>
+                                • Professional, insured drivers
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section impact-section">
+            <div class="container">
+                <h2 class="section-title">Your Impact</h2>
+                <div class="impact-grid">
+                    <div class="impact-item">
+                        <div class="impact-number" data-target="62">0</div>
+                        <div class="impact-label">Families Helped</div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-number" data-target="385">0</div>
+                        <div class=" impact-label">Meals Provided</div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-number" data-target="13">0</div>
+                        <div class="impact-label">Devices Donated</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+ 
+
+    <div class="footer-container">
+        <footer class="footer" id="contact">
+            <div class="container">
+                <div class="footer-top">
+                    <div class="footer-brand">
+                        <img src="../images/logobg.png" alt="Logo" class="footer-logo">
+                    </div>
+                    <div class="footer-nav">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Donate</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-donate">
+                        <h3>Donate</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Cars</a></li>
+                            <li><a href="#">Boats</a></li>
+                            <li><a href="#">RVs</a></li>
+                            <li><a href="#">Other Vehicles</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-resources">
+                        <h3>Resources</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Tax Benefits</a></li>
+                            <li><a href="#">Donation Guide</a></li>
+                            <li><a href="#">Contact Support</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact">
+                        <h3>Contact Us</h3>
+                        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" id="contactForm">
+                            <input type="hidden" name="access_key" value="29a03125-9517-47d2-8222-1577fb054c2d">
+                    
+                            <input type="text" name="name" placeholder="Name Surname" required>
+                            <input type="email" name="email" id="email" placeholder="Email" required>
+                            <input type="tel" name="phone" id="phone" placeholder="(123) 456-7890" required>
+                            <textarea name="message" id="message" placeholder="Your Message"></textarea>
+                            
+                            <button type="submit" id="submitBtn">Send Message</button>
+                        </form>
+                    </div>
+                    <div class="footer-socials">
+                        <h3>Follow Us</h3>
+                        <a href="#" class="social-icon">
+                            <ion-icon name="logo-facebook"></ion-icon>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <ion-icon name="logo-twitter"></ion-icon>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <ion-icon name="logo-instagram"></ion-icon>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <ion-icon name="logo-linkedin"></ion-icon>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 United Care And Support. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="donations.js"></script>
+    <script src="phone-mask.js"></script>
+    <script src="../js/script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
