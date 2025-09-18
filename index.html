@@ -873,7 +873,94 @@
       </section>
 
 
-
+      <section class="section gallery" id="gallery">
+        <div class="container">
+      
+          <p class="section-subtitle">
+            <img src="./assets/images/subtitle-img-green.png" width="32" height="7" alt="Wavy line">
+            <span>Our Impact in Action</span>
+          </p>
+      
+          
+      
+          <p class="gallery-description">
+            Every day, we work tirelessly to prepare and distribute nutritious meals to families and individuals in need. 
+            Our dedicated volunteers ensure that fresh, healthy food reaches those who need it most in our community.
+          </p>
+      
+          <!-- Image Slider -->
+          <div class="gallery-slider">
+            <div class="slider-container">
+              <div class="slide active">
+                <img src="./assets/images/gallery/gallery1.png" alt="Volunteers preparing food boxes">
+                <div class="slide-content">
+                  <h3>Food Preparation</h3>
+                  <p>Our volunteers carefully prepare nutritious meal boxes for distribution to families in need</p>
+                </div>
+              </div>
+              
+              <div class="slide">
+                <img src="./assets/images/gallery/gallery2.png" alt="Food box distribution event">
+                <div class="slide-content">
+                  <h3>Community Distribution</h3>
+                  <p>Bringing fresh meals directly to families in our neighborhood through organized events</p>
+                </div>
+              </div>
+              
+              <div class="slide">
+                <img src="./assets/images/gallery/gallery3.png" alt="Volunteer team in action">
+                <div class="slide-content">
+                  <h3>Our Amazing Volunteers</h3>
+                  <p>Dedicated team members working together to serve our community with compassion</p>
+                </div>
+              </div>
+              
+              <div class="slide">
+                <img src="./assets/images/gallery/gallery4.png" alt="Fresh produce sorting">
+                <div class="slide-content">
+                  <h3>Fresh Produce</h3>
+                  <p>Sorting and packaging fresh fruits and vegetables to ensure quality nutrition</p>
+                </div>
+              </div>
+              
+              <div class="slide">
+                <img src="./assets/images/gallery/gallery5.png" alt="Mobile food distribution">
+                <div class="slide-content">
+                  <h3>Mobile Outreach</h3>
+                  <p>Taking meals to those who cannot come to our distribution centers</p>
+                </div>
+              </div>
+              
+              <div class="slide">
+                <img src="./assets/images/gallery//gallery6.png" alt="Happy families receiving food">
+                <div class="slide-content">
+                  <h3>Community Impact</h3>
+                  <p>Creating positive change and bringing hope to families facing difficult times</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Navigation buttons -->
+            <button class="slider-btn prev-btn" onclick="changeSlide(-1)">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
+            <button class="slider-btn next-btn" onclick="changeSlide(1)">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+            
+            <!-- Dots indicator -->
+            <div class="slider-dots">
+              <span class="dot active" onclick="currentSlide(1)"></span>
+              <span class="dot" onclick="currentSlide(2)"></span>
+              <span class="dot" onclick="currentSlide(3)"></span>
+              <span class="dot" onclick="currentSlide(4)"></span>
+              <span class="dot" onclick="currentSlide(5)"></span>
+              <span class="dot" onclick="currentSlide(6)"></span>
+            </div>
+          </div>
+      
+        </div>
+      </section>
 
 
       <!-- 
@@ -1109,18 +1196,16 @@
                     </ul>
                 </div>
                 <div class="footer-contact">
-                    <h3>Contact Us</h3>
-                    <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" id="contactForm">
-                        <input type="hidden" name="access_key" value="29a03125-9517-47d2-8222-1577fb054c2d">
-                
-                        <input type="text" name="name" placeholder="Name Surname" required>
-                        <input type="email" name="email" id="email" placeholder="Email" required>
-                        <input type="tel" name="phone" id="phone" placeholder="(123) 456-7890" required>
-                        <textarea name="message" id="message" placeholder="Your Message"></textarea>
-                        
-                        <button type="submit" id="submitBtn">Send Message</button>
-                    </form>
-                </div>
+                  <h3>Contact Us</h3>
+                  <form class="contact-form" id="contactForm">
+                      <input type="text" name="name" id="name" placeholder="Name Surname" required>
+                      <input type="email" name="email" id="email" placeholder="Email" required>
+                      <input type="tel" name="phone" id="phone" placeholder="(123) 456-7890" required>
+                      <textarea name="message" id="message" placeholder="Your Message"></textarea>
+                      
+                      <button type="submit" id="submitBtn">Send Message</button>
+                  </form>
+              </div>
                 <div class="footer-socials">
                     <h3>Follow Us</h3>
                     <a href="#" class="social-icon">
@@ -1153,6 +1238,7 @@
   -->
   <script src="./assets/js/script.js"></script>
   <script src="assets/pages/phone-mask.js"></script>
+  <script src="assets/pages/donations.js"></script>
 
   <!-- 
     - ionicon link
