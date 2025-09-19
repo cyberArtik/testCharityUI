@@ -80,18 +80,18 @@ const DEFAULT_PAYMENT_LINK = 'https://square.link/u/xsxF6gV7?src=embed';
 
 function getPaymentLink(amount) {
     const donationType = isDonationTypeMonthly ? 'monthly' : 'onetime';
-    
+
     console.log('Getting payment link for:', {
         amount: amount,
         donationType: donationType,
         isDonationTypeMonthly: isDonationTypeMonthly
     });
-    
+
     if (PAYMENT_LINKS[donationType] && PAYMENT_LINKS[donationType][amount]) {
         console.log('Found specific link:', PAYMENT_LINKS[donationType][amount]);
         return PAYMENT_LINKS[donationType][amount];
     }
-    
+
     console.log('Using default link:', DEFAULT_PAYMENT_LINK);
     return DEFAULT_PAYMENT_LINK;
 }
@@ -114,12 +114,12 @@ function validatePhone(phone) {
 function showFieldError(fieldId, message) {
     const field = document.getElementById(fieldId);
     field.classList.add('invalid');
-    
+
     const existingError = field.parentNode.querySelector('.field-error');
     if (existingError) {
         existingError.remove();
     }
-    
+
     const errorDiv = document.createElement('div');
     errorDiv.className = 'field-error';
     errorDiv.textContent = message;
@@ -129,7 +129,7 @@ function showFieldError(fieldId, message) {
 function clearFieldError(fieldId) {
     const field = document.getElementById(fieldId);
     field.classList.remove('invalid');
-    
+
     const errorDiv = field.parentNode.querySelector('.field-error');
     if (errorDiv) {
         errorDiv.remove();
@@ -137,8 +137,11 @@ function clearFieldError(fieldId) {
 }
 
 function updateProgress() {
-    const progress = ((currentStep - 1) / 3) * 100;
-    document.querySelector('.progress-bar').style.width = `${progress}%`;
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+        const progress = ((currentStep - 1) / 3) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
 }
 
 function updateSteps() {
@@ -150,31 +153,39 @@ function updateSteps() {
 }
 
 function showStep(step) {
+    // Проверить, есть ли элементы donation формы на странице
+    const donationFormExists = document.querySelector('.form-page[data-step="1"]');
+    if (!donationFormExists) {
+        return; // Выйти, если это не donation страница
+    }
+
     document.querySelectorAll('.form-page').forEach(page => {
         page.classList.remove('active');
     });
-    document.querySelector(`.form-page[data-step="${step}"]`).classList.add('active');
+
+    const currentPage = document.querySelector(`.form-page[data-step="${step}"]`);
+    if (currentPage) {
+        currentPage.classList.add('active');
+    }
 
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
     const formNavigation = document.querySelector('.form-navigation');
 
-    prevBtn.style.display = step === 1 ? 'none' : 'block';
+    if (prevBtn) prevBtn.style.display = step === 1 ? 'none' : 'block';
 
-    if (step === 4) {
-        nextBtn.style.display = 'none';
-    } else {
-        nextBtn.style.display = 'block';
+    if (nextBtn) {
+        nextBtn.style.display = step === 4 ? 'none' : 'block';
     }
 
-    if (step === 4 && selectedDonationType !== 'money') {
-        submitBtn.style.display = 'block';
-    } else {
-        submitBtn.style.display = 'none';
+    if (submitBtn) {
+        submitBtn.style.display = (step === 4 && selectedDonationType !== 'money') ? 'block' : 'none';
     }
 
-    formNavigation.style.display = step === 1 ? 'none' : 'flex';
+    if (formNavigation) {
+        formNavigation.style.display = step === 1 ? 'none' : 'flex';
+    }
 
     updateProgress();
     updateSteps();
@@ -834,9 +845,9 @@ function showCheckoutWindow(e) {
 
 function handleSubmit(event) {
     event.preventDefault();
-    
+
     console.log('Form submission started for:', selectedDonationType);
-    
+
     if (validateStep(4)) {
         if (selectedDonationType !== 'money') {
             const name = document.getElementById('name').value;
@@ -847,7 +858,7 @@ function handleSubmit(event) {
 
             let donationDetails = '';
             let donationValue = '';
-            
+
             try {
                 switch (selectedDonationType) {
                     case 'vehicle':
@@ -856,7 +867,7 @@ function handleSubmit(event) {
                         const vehicleMake = document.getElementById('vehicleMake').value;
                         const vehicleModel = document.getElementById('vehicleModel').value;
                         const vehicleCondition = document.getElementById('vehicleCondition').value;
-                        
+
                         donationDetails = `Vehicle Details:\n- Type: ${vehicleType}\n- Year: ${vehicleYear}\n- Make: ${vehicleMake}\n- Model: ${vehicleModel}\n- Condition: ${vehicleCondition}`;
                         donationValue = `${vehicleYear} ${vehicleMake} ${vehicleModel}`;
                         break;
@@ -867,7 +878,7 @@ function handleSubmit(event) {
                         const vesselMake = document.getElementById('vesselMake').value;
                         const vesselLength = document.getElementById('vesselLength').value;
                         const vesselCondition = document.getElementById('vesselCondition').value;
-                        
+
                         donationDetails = `Vessel Details:\n- Type: ${vesselType}\n- Year: ${vesselYear}\n- Make: ${vesselMake}\n- Length: ${vesselLength} feet\n- Condition: ${vesselCondition}`;
                         donationValue = `${vesselYear} ${vesselMake} (${vesselLength} ft)`;
                         break;
@@ -901,33 +912,33 @@ function handleSubmit(event) {
                     },
                     body: JSON.stringify(formData)
                 })
-                .then(async (response) => {
-                    console.log('Response status:', response.status);
-                    let json = await response.json();
-                    console.log('Response data:', json);
-                    
-                    if (response.status == 200) {
-                        console.log('Form submitted successfully!');
-                        document.getElementById('donationForm').style.display = 'none';
-                        document.querySelector('.success-message').classList.add('active');
+                    .then(async (response) => {
+                        console.log('Response status:', response.status);
+                        let json = await response.json();
+                        console.log('Response data:', json);
 
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 5000);
-                    } else {
-                        console.error('Form submission error:', json);
-                        alert("Error submitting form: " + (json.message || 'Unknown error'));
+                        if (response.status == 200) {
+                            console.log('Form submitted successfully!');
+                            document.getElementById('donationForm').style.display = 'none';
+                            document.querySelector('.success-message').classList.add('active');
+
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 5000);
+                        } else {
+                            console.error('Form submission error:', json);
+                            alert("Error submitting form: " + (json.message || 'Unknown error'));
+                            submitButton.disabled = false;
+                            submitButton.innerHTML = "Submit Donation";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                        alert("Network error. Please check your connection and try again.");
                         submitButton.disabled = false;
                         submitButton.innerHTML = "Submit Donation";
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    alert("Network error. Please check your connection and try again.");
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = "Submit Donation";
-                });
-                
+                    });
+
             } catch (error) {
                 console.error('Error preparing form data:', error);
                 alert("Error preparing form data. Please try again.");
@@ -938,69 +949,86 @@ function handleSubmit(event) {
 
 function handleFooterContact(event) {
     event.preventDefault();
-    
+
     const form = event.target;
-    const formData = new FormData(form);
+    const name = form.name.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const message = form.message.value;
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.innerHTML;
-    
+
+    const TELEGRAM_BOT_TOKEN = '8297611317:AAFXxYBrKD9xdZg-VJt70O3NO3DLUUZd8DI';
+    const TELEGRAM_CHAT_ID = '-4822033577';
+
     submitButton.innerHTML = "Sending...";
     submitButton.disabled = true;
     submitButton.style.background = "#d4a60b";
-    
-    const data = {
-        access_key: "29a03125-9517-47d2-8222-1577fb054c2d",
-        subject: "New Contact Form Submission",
-        name: formData.get('name'),
-        email: formData.get('email'),
-        message: formData.get('message'),
-        from_page: "Footer Contact Form - " + window.location.href
-    };
-    
-    fetch("https://api.web3forms.com/submit", {
-        method: "POST",
+
+    const telegramMessage = `🔔 New Contact Form Submission
+
+👤 Name: ${name}
+📧 Email: ${email}
+📱 Phone: ${phone}
+
+💬 Message:
+${message}
+
+🌐 Website: United Care & Support
+📍 From: ${window.location.href}
+⏰ Time: ${new Date().toLocaleString()}
+
+---
+Quick WhatsApp Reply: https://wa.me/37360585085?text=Hello%20${encodeURIComponent(name)}!`;
+
+    // Отправить в Telegram
+    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
         headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: telegramMessage,
+            parse_mode: 'HTML'
+        })
     })
-    .then(async (response) => {
-        let json = await response.json();
-        if (response.status == 200) {
-            submitButton.innerHTML = "Message Sent!";
-            submitButton.style.background = "#28a745";
-            
-            setTimeout(() => {
-                form.reset();
-                submitButton.innerHTML = originalText;
-                submitButton.disabled = false;
-                submitButton.style.background = "";
-            }, 3000);
-        } else {
-            console.log(json);
-            alert("Error: " + json.message);
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                submitButton.innerHTML = "Message Sent!";
+                submitButton.style.background = "#28a745";
+
+                setTimeout(() => {
+                    form.reset();
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                    submitButton.style.background = "";
+                }, 3000);
+            } else {
+                throw new Error('Telegram API error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Error sending message. Please try again.");
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
             submitButton.style.background = "";
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        alert("Something went wrong. Please try again.");
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-        submitButton.style.background = "";
-    });
+        });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    showStep(1);
-    
+    // Проверить, есть ли donation форма на странице
+    const donationFormExists = document.querySelector('.form-page[data-step="1"]');
+    if (donationFormExists) {
+        showStep(1); // Только для donations.html
+    }
+
     const footerForm = document.getElementById('contactForm');
     if (footerForm) {
         footerForm.addEventListener('submit', handleFooterContact);
-        
+
         const emailInput = footerForm.querySelector('input[type="email"]');
         if (emailInput) {
             emailInput.addEventListener("input", function () {
@@ -1012,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
-        
+
         const messageInput = footerForm.querySelector('textarea');
         if (messageInput) {
             messageInput.addEventListener("input", function () {
