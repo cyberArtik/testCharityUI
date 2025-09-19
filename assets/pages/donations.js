@@ -995,7 +995,7 @@ function handleFooterContact(event) {
 }
 
 function sendToTelegramViaNetlify(name, email, phone, message, submitButton, originalText, form) {
-    fetch("https://whimsical-kitsune-412dba.netlify.app/.netlify/functions/telegram", {
+    fetch("https://marvelous-mermaid-7d584b.netlify.app/.netlify/functions/telegram", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, phone, message })
@@ -1060,4 +1060,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
 
