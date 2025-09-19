@@ -981,11 +981,15 @@ ${message}
 ---
 Quick WhatsApp Reply: https://wa.me/37360585085?text=Hello%20${encodeURIComponent(name)}!`;
 
-    // Отправить в Telegram
-    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    // Using CORS proxy to bypass browser restrictions
+    const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+    const TELEGRAM_URL = `${CORS_PROXY}https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+    fetch(TELEGRAM_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify({
             chat_id: TELEGRAM_CHAT_ID,
@@ -995,6 +999,7 @@ Quick WhatsApp Reply: https://wa.me/37360585085?text=Hello%20${encodeURIComponen
     })
         .then(response => response.json())
         .then(data => {
+            console.log('Telegram response:', data);
             if (data.ok) {
                 submitButton.innerHTML = "Message Sent!";
                 submitButton.style.background = "#28a745";
@@ -1006,23 +1011,83 @@ Quick WhatsApp Reply: https://wa.me/37360585085?text=Hello%20${encodeURIComponen
                     submitButton.style.background = "";
                 }, 3000);
             } else {
-                throw new Error('Telegram API error');
+                console.error('Telegram API error:', data);
+                throw new Error(`Telegram API error: ${data.description || 'Unknown error'}`);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Error sending message. Please try again.");
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
-            submitButton.style.background = "";
+            // Fallback to alternative CORS proxy
+            handleFallbackSubmission(form, name, email, phone, message, submitButton, originalText);
         });
 }
 
+// Fallback function with alternative CORS proxy
+function handleFallbackSubmission(form, name, email, phone, message, submitButton, originalText) {
+    const TELEGRAM_BOT_TOKEN = '8297611317:AAFXxYBrKD9xdZg-VJt70O3NO3DLUUZd8DI';
+    const TELEGRAM_CHAT_ID = '-4822033577';
+
+    const telegramMessage = `🔔 New Contact Form Submission
+
+👤 Name: ${name}
+📧 Email: ${email}
+📱 Phone: ${phone}
+
+💬 Message:
+${message}
+
+🌐 Website: United Care & Support
+📍 From: ${window.location.href}
+⏰ Time: ${new Date().toLocaleString()}
+
+---
+Quick WhatsApp Reply: https://wa.me/37360585085?text=Hello%20${encodeURIComponent(name)}!`;
+
+    // Alternative CORS proxy
+    const ALT_CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+    const TELEGRAM_URL = `${ALT_CORS_PROXY}${encodeURIComponent(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`)}`;
+
+    fetch(TELEGRAM_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: telegramMessage,
+            parse_mode: 'HTML'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Fallback response:', data);
+        if (data.ok) {
+            submitButton.innerHTML = "Message Sent!";
+            submitButton.style.background = "#28a745";
+
+            setTimeout(() => {
+                form.reset();
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                submitButton.style.background = "";
+            }, 3000);
+        } else {
+            throw new Error('Both proxies failed');
+        }
+    })
+    .catch(error => {
+        console.error('Fallback error:', error);
+        alert("Error sending message. Please try again or contact us directly.");
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+        submitButton.style.background = "";
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-    // Проверить, есть ли donation форма на странице
     const donationFormExists = document.querySelector('.form-page[data-step="1"]');
     if (donationFormExists) {
-        showStep(1); // Только для donations.html
+        showStep(1);
     }
 
     const footerForm = document.getElementById('contactForm');
