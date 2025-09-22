@@ -947,118 +947,51 @@ function handleSubmit(event) {
     }
 }
 
-function handleFooterContact(event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const name = form.name.value;
-    const email = form.email.value;
-    const phone = form.phone.value;
-    const message = form.message.value;
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalText = submitButton.innerHTML;
-
-    submitButton.innerHTML = "Sending...";
-    submitButton.disabled = true;
-    submitButton.style.background = "#d4a60b";
-
-    // Web3Forms (optional, can keep if you want backup submission)
-    const WEB3FORMS_KEY = 'YOUR_ACCESS_KEY'; // Ваш ключ Web3Forms
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('message', message);
-    formData.append('access_key', WEB3FORMS_KEY);
-    formData.append('subject', 'New Contact Form Submission from UCS Charity');
-    formData.append('from_name', 'UCS Contact Form');
-
-    fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Web3Forms response:', data);
-        if (data.success) {
-            // Отправка через Netlify Function вместо прокси
-            sendToTelegramViaNetlify(name, email, phone, message, submitButton, originalText, form);
-        } else {
-            throw new Error('Form submission failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Если Web3Forms не сработал, все равно пробуем Telegram через Netlify
-        sendToTelegramViaNetlify(name, email, phone, message, submitButton, originalText, form);
-    });
-}
-
-function sendToTelegramViaNetlify(name, email, phone, message, submitButton, originalText, form) {
-    fetch("https://marvelous-mermaid-7d584b.netlify.app/.netlify/functions/telegram", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, message })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-            completeSubmission(submitButton, originalText, form, true);
-        } else {
-            completeSubmission(submitButton, originalText, form, false);
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        completeSubmission(submitButton, originalText, form, false);
-    });
-}
-
-function completeSubmission(submitButton, originalText, form, success) {
-    if (success) {
-        submitButton.innerHTML = "Message Sent!";
-        submitButton.style.background = "#28a745";
-
-        setTimeout(() => {
-            form.reset();
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
-            submitButton.style.background = "";
-        }, 3000);
-    } else {
-        alert("Error sending message. Please try again or contact us directly.");
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
-        submitButton.style.background = "";
-    }
-}
 
 document.addEventListener('DOMContentLoaded', function () {
-    const footerForm = document.getElementById('contactForm');
-    if (footerForm) {
-        footerForm.addEventListener('submit', handleFooterContact);
-
-        const emailInput = footerForm.querySelector('input[type="email"]');
-        if (emailInput) {
-            emailInput.addEventListener("input", function () {
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(emailInput.value)) {
-                    emailInput.style.border = "2px solid red";
-                } else {
-                    emailInput.style.border = "2px solid green";
-                }
-            });
-        }
-
-        const messageInput = footerForm.querySelector('textarea');
-        if (messageInput) {
-            messageInput.addEventListener("input", function () {
-                if (messageInput.value.length > 500) {
-                    messageInput.value = messageInput.value.substring(0, 500);
-                }
-            });
-        }
+    // Проверить, есть ли donation форма на странице
+    const donationFormExists = document.querySelector('.form-page[data-step="1"]');
+    if (donationFormExists) {
+        showStep(1); // Только для donations.html
     }
+
+    const contactForm = document.getElementById("contactForm");
+
+    if (contactForm) {
+        contactForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = "Sending...";
+            submitButton.disabled = true;
+
+            const formData = new FormData(contactForm);
+            formData.append("access_key", "c3ce6b79-2e06-4a57-8dff-97bac0587420");
+
+            fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            })
+                .then(async response => {
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert("Message sent successfully!");
+                        contactForm.reset();
+                    } else {
+                        console.error("Error:", data);
+                        alert("Error sending message. Please try again.");
+                    }
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                })
+                .catch(error => {
+                    console.error("Network error:", error);
+                    alert("Network error. Please try again.");
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                });
+        });
+    }
+
 });
-
-
